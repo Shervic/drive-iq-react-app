@@ -1,25 +1,185 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import SmallPopUp from "./SmallPopUp";
+import sampleData from "./sampleData.json";
+import "./styles/App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    // function App() {
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            isBtnClicked: false,
+            popupType: "",
+            popupMsg: "",
+        };
+
+        this.loadData = this.loadData.bind(this);
+        this.deleteLastRow = this.deleteLastRow.bind(this);
+        this.addRow = this.addRow.bind(this);
+        this.resetPopup = this.resetPopup.bind(this);
+    }
+
+    resetPopup() {
+        this.setState({
+            isBtnClicked: false,
+            popupType: "",
+            popupMsg: "",
+        });
+    }
+
+    loadData() {
+        const { data } = this.state;
+
+        if (data.length === 0) {
+            this.setState({
+                data: sampleData,
+                isBtnClicked: true,
+                popupType: "success",
+                popupMsg: "Data has beed loaded",
+            });
+        } else {
+            this.setState({
+                isBtnClicked: true,
+                popupType: "error",
+                popupMsg: "Data is already loaded",
+            });
+        }
+    }
+
+    deleteLastRow() {
+        const { data } = this.state;
+
+        if (data.length !== 0) {
+            data.pop();
+
+            this.setState({
+                data: data,
+                isBtnClicked: true,
+                popupType: "success",
+                popupMsg: "Last row has been deleted",
+            });
+        } else {
+            this.setState({
+                isBtnClicked: true,
+                popupType: "error",
+                popupMsg: "No data found",
+            });
+        }
+    }
+
+    addRow() {
+        const { data } = this.state;
+
+        if (data.length !== 0) {
+            data.push(data[0]);
+
+            this.setState({
+                data: data,
+                isBtnClicked: true,
+                popupType: "success",
+                popupMsg: "New row has been added",
+            });
+        } else {
+            this.setState({
+                isBtnClicked: true,
+                popupType: "error",
+                popupMsg: "No data found",
+            });
+        }
+    }
+
+    render() {
+        const { data } = this.state;
+
+        let content = data.map((row) => {
+            let domains = (
+                <ul>
+                    {row.domains.map((domain) => {
+                        return <li>{domain}</li>;
+                    })}
+                </ul>
+            );
+
+            let web_pages = (
+                <ul>
+                    {row.web_pages.map((web_page) => {
+                        return (
+                            <li>
+                                <a href={web_page}>{web_page}</a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            );
+
+            return (
+                <tr>
+                    <td className="m2">{domains}</td>
+                    <td className="m3">{web_pages}</td>
+                    <td className="m1">{row["state-province"]}</td>
+                    <td className="m3">{row.name}</td>
+                    <td className="m15">{row.country}</td>
+                    <td className="m15">{row.alpha_two_code}</td>
+                </tr>
+            );
+        });
+
+        let table = (
+            <table>
+                <tr className="table-heading">
+                    <th className="m2">Domains</th>
+                    <th className="m3">Web Pages</th>
+                    <th className="m1">State Province</th>
+                    <th className="m3">Name</th>
+                    <th className="m15">Country</th>
+                    <th className="m15">Alpha Two Code</th>
+                </tr>
+
+                <tr>
+                    <td colspan="6">
+                        <div className="table-content">
+                            {data.length !== 0 ? (
+                                content
+                            ) : (
+                                <div className="no-data-msg">
+                                    Table has no data. Click '<span onClick={this.loadData}>Load</span>' to load data.
+                                </div>
+                            )}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        );
+
+        let popup;
+        if (this.state.isBtnClicked) {
+            popup = <SmallPopUp type={this.state.popupType} text={this.state.popupMsg} onFinish={this.resetPopup} />;
+        }
+
+        return (
+            <div className="app">
+                <div className="header">
+                    <h1>Drive IQ React Task</h1>
+                    <h2>By Viktoriya Voblikova</h2>
+                    <div className="btn-container">
+                        <button className="load-btn" onClick={this.loadData}>
+                            Load
+                        </button>
+                        <button className="delete-btn" onClick={this.deleteLastRow}>
+                            Delete
+                        </button>
+                        <button className="add-btn" onClick={this.addRow}>
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                {table}
+                {popup}
+            </div>
+        );
+    }
 }
 
 export default App;
