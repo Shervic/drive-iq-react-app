@@ -4,7 +4,6 @@ import sampleData from "./sampleData.json";
 import "./styles/App.css";
 
 class App extends Component {
-    // function App() {
     constructor() {
         super();
         this.state = {
@@ -14,10 +13,10 @@ class App extends Component {
             popupMsg: "",
         };
 
+        this.resetPopup = this.resetPopup.bind(this);
         this.loadData = this.loadData.bind(this);
         this.deleteLastRow = this.deleteLastRow.bind(this);
         this.addRow = this.addRow.bind(this);
-        this.resetPopup = this.resetPopup.bind(this);
     }
 
     resetPopup() {
@@ -51,13 +50,14 @@ class App extends Component {
         const { data } = this.state;
 
         if (data.length !== 0) {
+            let tempName = data[data.length - 1].name;
             data.pop();
 
             this.setState({
                 data: data,
                 isBtnClicked: true,
                 popupType: "success",
-                popupMsg: "Last row has been deleted",
+                popupMsg: `${tempName} has been deleted`,
             });
         } else {
             this.setState({
@@ -72,13 +72,14 @@ class App extends Component {
         const { data } = this.state;
 
         if (data.length !== 0) {
+            let tempName = data[0].name;
             data.push(data[0]);
 
             this.setState({
                 data: data,
                 isBtnClicked: true,
                 popupType: "success",
-                popupMsg: "New row has been added",
+                popupMsg: `${tempName} has been added`,
             });
         } else {
             this.setState({
@@ -90,7 +91,7 @@ class App extends Component {
     }
 
     render() {
-        const { data } = this.state;
+        const { data, isBtnClicked, popupType, popupMsg } = this.state;
 
         let content = data.map((row) => {
             let domains = (
@@ -113,11 +114,13 @@ class App extends Component {
                 </ul>
             );
 
+            let state_province = row["state-province"] || "N/A";
+
             return (
                 <tr>
                     <td className="m2">{domains}</td>
                     <td className="m3">{web_pages}</td>
-                    <td className="m1">{row["state-province"]}</td>
+                    <td className="m1">{state_province}</td>
                     <td className="m3">{row.name}</td>
                     <td className="m15">{row.country}</td>
                     <td className="m15">{row.alpha_two_code}</td>
@@ -143,7 +146,10 @@ class App extends Component {
                                 content
                             ) : (
                                 <div className="no-data-msg">
-                                    Table has no data. Click '<span onClick={this.loadData}>Load</span>' to load data.
+                                    <p>
+                                        Table has no data. Click '<span onClick={this.loadData}>Load</span>' to load
+                                        data.
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -153,28 +159,29 @@ class App extends Component {
         );
 
         let popup;
-        if (this.state.isBtnClicked) {
-            popup = <SmallPopUp type={this.state.popupType} text={this.state.popupMsg} onFinish={this.resetPopup} />;
+        if (isBtnClicked) {
+            popup = <SmallPopUp type={popupType} text={popupMsg} onFinish={this.resetPopup} />;
         }
 
         return (
             <div className="app">
                 <div className="header">
-                    <h1>Drive IQ React Task</h1>
-                    <h2>By Viktoriya Voblikova</h2>
-                    <div className="btn-container">
-                        <button className="load-btn" onClick={this.loadData}>
-                            Load
-                        </button>
-                        <button className="delete-btn" onClick={this.deleteLastRow}>
-                            Delete
-                        </button>
-                        <button className="add-btn" onClick={this.addRow}>
-                            Add
-                        </button>
+                    <div className="header-content">
+                        <h1>Drive IQ React Task</h1>
+                        <h2>By Viktoriya Voblikova</h2>
+                        <div className="btn-container">
+                            <button className="load-btn" onClick={this.loadData}>
+                                Load
+                            </button>
+                            <button className="delete-btn" onClick={this.deleteLastRow}>
+                                Delete
+                            </button>
+                            <button className="add-btn" onClick={this.addRow}>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
-
                 {table}
                 {popup}
             </div>

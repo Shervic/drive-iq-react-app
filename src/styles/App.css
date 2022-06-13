@@ -1,38 +1,39 @@
 body {
-  font-size: 14px;
+  margin: 0;
+  padding: 0;
   font-family: Open Sans, sans-serif;
   background-color: #e0e0e0;
   color: #283739;
 }
 
 .app {
-  /* width: 80vw; */
-  /* margin-bottom: 15vh; */
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
 }
 
 .header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  display: flex;
+  width: 100%;
   height: 29vh;
-  /* margin-top: 2vw; */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   background-color: #e0e0e0;
-  /* padding: auto; */
-  /* padding: 50px 0; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: space-be; */
-  /* align-content: center; */
-  /* justify-content: center; */
-  padding-top: 1vh;
 }
 
 .header-content {
-  /* width: fit-content;
-  height: fit-content;
-  margin: auto; */
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header-content > * {
+  margin: 0;
 }
 
 .btn-container {
@@ -40,49 +41,23 @@ body {
   flex-direction: row;
   justify-content: space-between;
   width: 30vw;
-  margin: 2vw auto;
+  margin: 0 auto;
+  margin-top: 1em;
 }
 
 .btn-container button {
-  width: 8vw;
+  width: 29%;
   padding: 1em;
   border: none;
   border-radius: 5px;
-  /* font-weight: bold; */
   font-size: 1em;
   color: #f0f0f0;
-  /* box-shadow: 2px 2px 5px black; */
   background-color: rgba(44, 93, 99, 1);
 }
 
 .btn-container button:hover {
   background-color: rgba(44, 93, 99, 0.8);
 }
-
-/* .btn-container .load-btn {
-  background-color: rgba(0, 124, 185, 1);
-}
-
-.btn-container .load-btn:hover {
-  background-color: rgba(0, 124, 185, 0.8);
-}
-
-.btn-container .delete-btn {
-  background-color: rgba(192, 41, 66, 1);
-}
-
-.btn-container .delete-btn:hover {
-  background-color: rgba(192, 41, 66, 0.8);
-}
-
-.btn-container .add-btn {
-  background-color: rgba(0, 132, 33, 1);
-}
-
-.btn-container .add-btn:hover {
-  background-color: rgba(0, 132, 33, 0.8);
-} */
-
 
 table {
   width: 80vw;
@@ -96,9 +71,8 @@ table > tr {
 }
 
 table tr {
-  width: 80vw;
+  width: 100%;
 }
-
 
 table th:not(:last-child) {
   border-right: 1px #e0e0e0 solid;
@@ -114,7 +88,7 @@ table .table-content tr:not(:last-child) {
 
 table .table-heading th,
 table .table-content td {
-  padding: 10px;
+  padding: 1em;
 }
 
 table th {
@@ -134,9 +108,10 @@ table th {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   height: 100%;
   font-size: 2em;
-  margin: auto;
+  flex-wrap: wrap;
 }
 
 .no-data-msg span {
@@ -173,3 +148,19 @@ table th {
 .m4 {
   width: 33.33%;
 }
+
+/* MEDIA QUERIES  */
+
+@media only screen and (min-width: 1921px) {
+  .app{
+    font-size: 18px;
+  }
+}
+
+
+@media only screen and (max-width: 700px) {
+  .btn-container {
+    width: 70vw;
+  }
+}
+
